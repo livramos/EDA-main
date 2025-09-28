@@ -1,0 +1,12 @@
+Nome: Lívia Ramos Vallim
+Matricula: 2320338 
+
+Funções Criadas: 
+-> Fila*fila_cria(void)
+cria uma fila vazia 
+
+-> void fila_insere(Fila* f, float v )
+insere a na fila o item na posição 
+
+-> float retira_fila(Fila* f)
+retira um item da fila 
