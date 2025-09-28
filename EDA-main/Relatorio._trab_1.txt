@@ -10,3 +10,6 @@ insere a na fila o item na posição
 
 -> float retira_fila(Fila* f)
 retira um item da fila 
+
+-> void fila_libera(Fila* f ) 
+ libera a a memoria da fila 

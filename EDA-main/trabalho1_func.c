@@ -1,20 +1,12 @@
-
-#include<stdio.h>
-#include<stdlib.h>
-
-#define N 17 
-
+#include <trabalho1.h>
 struct paciente{
     char* cor;
     struct paciente* prox;  
 }; 
-typedef struct paciente Paciente;
-
 struct fila{
     Paciente* inicio;
     Paciente* fim;
 };
-typedef struct fila Fila;
 
 Fila*fila_cria(void){
     /*cria lista */
@@ -23,7 +15,7 @@ Fila*fila_cria(void){
     f->fim = NULL;   
     return f;
 }
-void fila_insere(Fila* f, float v ){
+void fila_insere(Fila* f, char* v ){
     /*insere a item na lista*/
     Paciente* n=(Paciente*)malloc(sizeof(Paciente));
     n->cor= v;
@@ -32,9 +24,37 @@ void fila_insere(Fila* f, float v ){
         f->fim->prox=n;
     else
         f->inicio=n;
-        f->fim=n;
+    f->fim=n;
 }
-float retira_fila(Fila* f){
+char* retira_fila(Fila* f){
     /*retira um item da fila*/ 
-    Lista*
+    Paciente* t;
+    char* v; 
+    if(fila_vazia(f)){
+        printf("vazio\n");
+        exit(1);
+    }
+    t=f->inicio;
+    v=t->cor;
+    f->inicio=t->prox;
+    if(f->inicio==NULL)
+        f->fim=NULL;
+    free(t);
+    return v; 
 }
+
+int fila_vazia(Fila* f){
+    return (f->inicio == NULL);
+}
+
+void fila_libera(Fila* f ){
+    /*vai liberar a fila */
+    Paciente* q= f-> inicio;
+    while(q!=NULL){
+        Paciente* t=q->prox;
+        free(q);
+        q=t;
+    }
+    free(f); 
+}
+
