@@ -1,12 +1,4 @@
-#include <trabalho1.h>
-struct paciente{
-    char* cor;
-    struct paciente* prox;  
-}; 
-struct fila{
-    Paciente* inicio;
-    Paciente* fim;
-};
+#include "trabalho1.h"
 
 Fila*fila_cria(void){
     /*cria lista */
@@ -18,7 +10,9 @@ Fila*fila_cria(void){
 void fila_insere(Fila* f, char* v ){
     /*insere a item na lista*/
     Paciente* n=(Paciente*)malloc(sizeof(Paciente));
-    n->cor= v;
+    // Aloca e copia a string
+    n->cor = (char*)malloc(strlen(v) + 1);
+    strcpy(n->cor, v);
     n->prox=NULL;
     if(f->fim!=NULL)
         f->fim->prox=n;
@@ -52,6 +46,7 @@ void fila_libera(Fila* f ){
     Paciente* q= f-> inicio;
     while(q!=NULL){
         Paciente* t=q->prox;
+        free(q->cor);  // Libera a string também
         free(q);
         q=t;
     }
@@ -63,12 +58,27 @@ Fila* arq_lista( FILE*arq){
     Fila* f = fila_cria();
     char buffer[100];
     while(fgets(buffer, sizeof(buffer), arq)){
-        buffer[strcspn(buffer, "\n")] = 0;  // Remove newline
-        fila_insere(f, strdup(buffer));
+        buffer[strcspn(buffer, "\n")] = 0;  
+        fila_insere(f, buffer);
     }
     return f;
 }
 
-void ordena_fila(Fila*f){
-    /*ordena a fila na ordem correta*/
+void fila_imprime(Fila* f){
+    /*imprime todos os elementos da fila*/
+    if(f == NULL || fila_vazia(f)){
+        printf("Fila vazia\n");
+        return;
+    }
+    
+    Paciente* atual = f->inicio;
+    printf("Conteudo da fila:\n");
+    while(atual != NULL){
+        printf("%s\n", atual->cor);
+        atual = atual->prox;
+    }
 }
+
+/*void ordena_fila(Fila*f){
+    // ordena a fila na ordem correta
+}*/ 

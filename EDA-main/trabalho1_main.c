@@ -7,10 +7,10 @@ if(arq==NULL){
     exit(1); 
 }else{ 
   Fila* Lista_desorganizada=arq_lista(arq);
-  print(Lista_desorganizada);
-    fclose(arq);
-  /*ordena_fila(Lista_desorganizada);
-  fila_libera(Lista_desorganizada);*/
+  fila_imprime(Lista_desorganizada);
+  fclose(arq);
+  /*ordena_fila(Lista_desorganizada);*/
+  fila_libera(Lista_desorganizada);
 
 } 
   return 0; 
