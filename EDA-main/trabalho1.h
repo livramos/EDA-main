@@ -12,3 +12,5 @@ void fila_insere(Fila* f, char* v );
 char* retira_fila(Fila* f);
 int fila_vazia(Fila* f);
 void fila_libera(Fila* f );
+Fila* arq_lista( FILE*arq);
+void ordena_fila(Fila*f);

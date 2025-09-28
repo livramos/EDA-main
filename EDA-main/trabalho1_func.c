@@ -58,3 +58,17 @@ void fila_libera(Fila* f ){
     free(f); 
 }
 
+Fila* arq_lista( FILE*arq){
+    /*le o arquivo e me retorna uma lista */
+    Fila* f = fila_cria();
+    char buffer[100];
+    while(fgets(buffer, sizeof(buffer), arq)){
+        buffer[strcspn(buffer, "\n")] = 0;  // Remove newline
+        fila_insere(f, strdup(buffer));
+    }
+    return f;
+}
+
+void ordena_fila(Fila*f){
+    /*ordena a fila na ordem correta*/
+}
