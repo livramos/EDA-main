@@ -8,8 +8,21 @@ cria uma fila vazia
 -> void fila_insere(Fila* f, float v )
 insere a na fila o item na posição 
 
--> float retira_fila(Fila* f)
+-> char* retira_fila(Fila* f)
 retira um item da fila 
 
 -> void fila_libera(Fila* f ) 
  libera a a memoria da fila 
+
+-> int fila_vazia(Fila* f);
+Retorna se a fila está vazia 
+
+-> Fila* arq_lista(FILE* arq);
+transforma o arquivo lido em uma lista 
+
+-> void ordena_fila(Fila* f);
+ordena a lista da maneira que foi pedido
+
+-> void fila_imprime(Fila* f);
+imprime a lista 
+
