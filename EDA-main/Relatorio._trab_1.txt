@@ -1,28 +1,41 @@
 Nome: Lívia Ramos Vallim
 Matricula: 2320338 
 
-Funções Criadas: 
--> Fila*fila_cria(void)
-cria uma fila vazia 
-
--> void fila_insere(Fila* f, float v )
-insere a na fila o item na posição 
-
--> char* retira_fila(Fila* f)
-retira um item da fila 
-
--> void fila_libera(Fila* f ) 
- libera a a memoria da fila 
-
--> int fila_vazia(Fila* f);
-Retorna se a fila está vazia 
-
--> Fila* arq_lista(FILE* arq);
-transforma o arquivo lido em uma lista 
-
--> void ordena_fila(Fila* f);
-ordena a lista da maneira que foi pedido
-
--> void fila_imprime(Fila* f);
 imprime a lista 
+Funções Criadas:
+-> Fila* fila_cria(void)
+	Cria uma fila vazia e inicializa ponteiros de início e fim.
+
+-> void fila_insere(Fila* f, char tipo, int id, const char* cor)
+	Cria um novo paciente (letra de origem, identificador numérico e cor) e o insere no final da fila.
+
+-> Paciente* fila_pop(Fila* f)
+	Remove o paciente na frente da fila preservando seus dados para reutilização.
+
+-> void fila_anexa_paciente(Fila* f, Paciente* paciente)
+	Anexa um paciente já alocado ao final da fila (usado para mover itens entre listas).
+
+-> Paciente* fila_retira_por_id(Fila* f, int id)
+	Localiza e remove o primeiro paciente com o identificador informado.
+
+-> void paciente_libera(Paciente* paciente)
+	Libera a memória associada ao paciente removido.
+
+-> int fila_vazia(Fila* f)
+	Informa se a fila está sem elementos.
+
+-> void carregar_listas(FILE* arq, Fila* iniciais, Fila* eventos)
+	Lê o arquivo de entrada e separa os pacientes em duas filas distintas (prefixo 'a' para iniciais e 'c' para eventos).
+
+-> void ordena_fila(Fila* f)
+	Reordena a fila agrupando pacientes por prioridade de cor (vermelha, amarela, verde) mantendo a ordem de chegada.
+
+-> void fila_imprime(Fila* f)
+	Exibe todos os pacientes formatados como "id - Cor".
+
+-> void fila_contagem_por_cor(Fila* f, int* vermelha, int* amarela, int* verde)
+	Conta quantos pacientes existem em cada prioridade.
+
+-> void fila_libera(Fila* f)
+	Libera toda a memória alocada para a fila.
 
