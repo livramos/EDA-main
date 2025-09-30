@@ -6,9 +6,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-/*definições */
-#define N 17 
-
 /*structs*/
 struct paciente{
     char tipo;
@@ -37,5 +34,10 @@ void carregar_listas(FILE* arq, Fila* iniciais, Fila* eventos);
 void ordena_fila(Fila* f);
 void fila_imprime(Fila* f);
 void fila_contagem_por_cor(Fila* f, int* vermelha, int* amarela, int* verde);
+void paciente_imprime(const Paciente* paciente);
+int fila_contem_id(const Fila* f, int id);
+void procedimento_imprime(const char* titulo, const char* complemento);
+void fila_imprime_com_contagem(const char* titulo, Fila* fila);
+void fila_inserir_eventos(Fila* origem, Fila* destino, int quantidade);
 
 #endif

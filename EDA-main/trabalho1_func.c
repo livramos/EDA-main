@@ -3,16 +3,6 @@
 #include <ctype.h>
 #include <string.h>
 
-static void anexar_paciente(Paciente* nodo, Paciente** inicio, Paciente** fim){
-    nodo->prox = NULL;
-    if(*fim != NULL){
-        (*fim)->prox = nodo;
-    }else{
-        *inicio = nodo;
-    }
-    *fim = nodo;
-}
-
 static char* dup_minusculo(const char* texto){
     if(texto == NULL){
         return NULL;
@@ -128,6 +118,21 @@ Paciente* fila_retira_por_id(Fila* f, int id){
     return NULL;
 }
 
+int fila_contem_id(const Fila* f, int id){
+    if(f == NULL){
+        return 0;
+    }
+
+    const Paciente* atual = f->inicio;
+    while(atual != NULL){
+        if(atual->id == id){
+            return 1;
+        }
+        atual = atual->prox;
+    }
+    return 0;
+}
+
 void paciente_libera(Paciente* paciente){
     if(paciente == NULL){
         return;
@@ -203,7 +208,7 @@ void carregar_listas(FILE* arq, Fila* iniciais, Fila* eventos){
     }
 }
 
-static void imprime_paciente(const Paciente* paciente){
+void paciente_imprime(const Paciente* paciente){
     if(paciente == NULL){
         return;
     }
@@ -225,7 +230,7 @@ void fila_imprime(Fila* f){
 
     Paciente* atual = f->inicio;
     while(atual != NULL){
-        imprime_paciente(atual);
+        paciente_imprime(atual);
         atual = atual->prox;
     }
 }
@@ -264,53 +269,80 @@ void ordena_fila(Fila* f){
         return;
     }
 
-    Paciente *inicio_vermelho = NULL, *fim_vermelho = NULL;
-    Paciente *inicio_amarelo = NULL, *fim_amarelo = NULL;
-    Paciente *inicio_verde = NULL, *fim_verde = NULL;
+    Fila vermelha = {NULL, NULL};
+    Fila amarela = {NULL, NULL};
+    Fila verde = {NULL, NULL};
 
     Paciente* atual = f->inicio;
     while(atual != NULL){
         Paciente* proximo = atual->prox;
         if(atual->cor != NULL && strcmp(atual->cor, "vermelha") == 0){
-            anexar_paciente(atual, &inicio_vermelho, &fim_vermelho);
+            fila_anexa_paciente(&vermelha, atual);
         }else if(atual->cor != NULL && strcmp(atual->cor, "amarela") == 0){
-            anexar_paciente(atual, &inicio_amarelo, &fim_amarelo);
+            fila_anexa_paciente(&amarela, atual);
         }else{
-            anexar_paciente(atual, &inicio_verde, &fim_verde);
+            fila_anexa_paciente(&verde, atual);
         }
         atual = proximo;
     }
 
-    Paciente* novo_inicio = NULL;
-    Paciente* novo_fim = NULL;
+    Fila* grupos[] = {&vermelha, &amarela, &verde};
+    f->inicio = NULL;
+    f->fim = NULL;
 
-    if(inicio_vermelho != NULL){
-        novo_inicio = inicio_vermelho;
-        novo_fim = fim_vermelho;
-    }
-
-    if(inicio_amarelo != NULL){
-        if(novo_inicio == NULL){
-            novo_inicio = inicio_amarelo;
-        }else{
-            novo_fim->prox = inicio_amarelo;
+    for(size_t i = 0; i < sizeof(grupos) / sizeof(grupos[0]); ++i){
+        if(grupos[i]->inicio == NULL){
+            continue;
         }
-        novo_fim = fim_amarelo;
-    }
-
-    if(inicio_verde != NULL){
-        if(novo_inicio == NULL){
-            novo_inicio = inicio_verde;
+        if(f->inicio == NULL){
+            f->inicio = grupos[i]->inicio;
         }else{
-            novo_fim->prox = inicio_verde;
+            f->fim->prox = grupos[i]->inicio;
         }
-        novo_fim = fim_verde;
+        f->fim = grupos[i]->fim;
     }
 
-    if(novo_fim != NULL){
-        novo_fim->prox = NULL;
+    if(f->fim != NULL){
+        f->fim->prox = NULL;
+    }
+}
+
+void procedimento_imprime(const char* titulo, const char* complemento){
+    if(titulo != NULL){
+        printf("%s\n", titulo);
+    }
+    if(complemento != NULL && complemento[0] != '\0'){
+        printf("%s\n", complemento);
+    }
+}
+
+void fila_imprime_com_contagem(const char* titulo, Fila* fila){
+    int vermelha = 0;
+    int amarela = 0;
+    int verde = 0;
+
+    if(titulo != NULL){
+        printf("%s\n", titulo);
+    }
+    fila_imprime(fila);
+    fila_contagem_por_cor(fila, &vermelha, &amarela, &verde);
+    printf("vermelha -%d, amarela -%d, verde -%d\n\n", vermelha, amarela, verde);
+}
+
+void fila_inserir_eventos(Fila* origem, Fila* destino, int quantidade){
+    if(origem == NULL || destino == NULL || quantidade <= 0){
+        return;
     }
 
-    f->inicio = novo_inicio;
-    f->fim = novo_fim;
+    for(int i = 0; i < quantidade; ++i){
+        Paciente* paciente = fila_pop(origem);
+        if(paciente == NULL){
+            break;
+        }
+        if(fila_contem_id(destino, paciente->id)){
+            paciente_libera(paciente);
+            continue;
+        }
+        fila_anexa_paciente(destino, paciente);
+    }
 }

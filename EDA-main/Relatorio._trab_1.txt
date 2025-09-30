@@ -1,41 +1,49 @@
 Nome: Lívia Ramos Vallim
 Matricula: 2320338 
 
-imprime a lista 
-Funções Criadas:
--> Fila* fila_cria(void)
-	Cria uma fila vazia e inicializa ponteiros de início e fim.
+objetivo: 
+pegar a lista e coloca-la em uma fila de maneira organizada, colocando em ordem de 
+prioridade Vermelho(urgente) Amarelo(mediano) Verde(leve), e inserindo ou removendo da lista conforme os 
+casos de retornos são pedidos 
 
--> void fila_insere(Fila* f, char tipo, int id, const char* cor)
-	Cria um novo paciente (letra de origem, identificador numérico e cor) e o insere no final da fila.
+Estrutura do progrma: 
+trabalho1_func.c: 
+arquivo que concentra toda a implementação das operações da TAD fila. Funções ativas no código atual:
 
--> Paciente* fila_pop(Fila* f)
-	Remove o paciente na frente da fila preservando seus dados para reutilização.
+1. Operações básicas da fila
+	- Fila* fila_cria(void): cria uma fila vazia inicializando ponteiros de início e fim.
+	- void fila_anexa_paciente(Fila* f, Paciente* paciente): anexa um paciente já alocado ao final da fila.
+	- void fila_insere(Fila* f, char tipo, int id, const char* cor): cria um novo paciente e o insere na fila de origem.
+	- Paciente* fila_pop(Fila* f): remove e devolve o paciente do início.
+	- Paciente* fila_retira_por_id(Fila* f, int id): localiza e remove o primeiro paciente com o identificador informado.
+	- int fila_contem_id(const Fila* f, int id): verifica se um paciente já está presente.
+	- void paciente_libera(Paciente* paciente) e void fila_libera(Fila* f): liberam a memória alocada.
+	- int fila_vazia(Fila* f): retorna se a fila está vazia (utilizada internamente pelas demais rotinas).
 
--> void fila_anexa_paciente(Fila* f, Paciente* paciente)
-	Anexa um paciente já alocado ao final da fila (usado para mover itens entre listas).
+2. Leitura e preparação dos dados
+	- void carregar_listas(FILE* arq, Fila* iniciais, Fila* eventos): interpreta o arquivo de entrada e separa registros entre fila inicial e eventos.
+	- void ordena_fila(Fila* f): agrupa pacientes por prioridade (vermelha, amarela, verde) mantendo a ordem relativa.
+	- void fila_inserir_eventos(Fila* origem, Fila* destino, int quantidade): transfere pacientes da fila de eventos para a fila principal evitando duplicidades.
 
--> Paciente* fila_retira_por_id(Fila* f, int id)
-	Localiza e remove o primeiro paciente com o identificador informado.
+3. Impressão e relatórios
+	- void paciente_imprime(const Paciente* paciente): imprime um paciente formatado como "id - Cor".
+	- void fila_imprime(Fila* f): percorre e imprime todos os pacientes; exibe "Fila vazia" quando aplicável.
+	- void fila_contagem_por_cor(Fila* f, int* vermelha, int* amarela, int* verde): contabiliza pacientes por prioridade.
+	- void fila_imprime_com_contagem(const char* titulo, Fila* fila): exibe uma etapa completa com lista e contagem por cor.
+	- void procedimento_imprime(const char* titulo, const char* complemento): centraliza os títulos e mensagens auxiliares exibidos no console.
 
--> void paciente_libera(Paciente* paciente)
-	Libera a memória associada ao paciente removido.
+trabalho1_main: 
+arquivo que contém apenas a função main. Nela o programa:
+	1. Lê o arquivo "informacoes_trabalho1.txt".
+	2. Separa os registros em filas de chegadas e de eventos.
+	3. Move os primeiros oito pacientes para atendimento e exibe as listas das etapas a–f conforme o PDF.
+	4. Ordena por prioridade antes de cada impressão e trata inserções/remoções solicitadas.
+	5. Libera toda a memória ao final.
 
--> int fila_vazia(Fila* f)
-	Informa se a fila está sem elementos.
+trabalho1.h
+contém as definições das structs `Paciente` e `Fila`, além dos protótipos de todas as funções citadas acima.
 
--> void carregar_listas(FILE* arq, Fila* iniciais, Fila* eventos)
-	Lê o arquivo de entrada e separa os pacientes em duas filas distintas (prefixo 'a' para iniciais e 'c' para eventos).
+trabalho1.exe
+o executavel do trabalho 
 
--> void ordena_fila(Fila* f)
-	Reordena a fila agrupando pacientes por prioridade de cor (vermelha, amarela, verde) mantendo a ordem de chegada.
-
--> void fila_imprime(Fila* f)
-	Exibe todos os pacientes formatados como "id - Cor".
-
--> void fila_contagem_por_cor(Fila* f, int* vermelha, int* amarela, int* verde)
-	Conta quantos pacientes existem em cada prioridade.
-
--> void fila_libera(Fila* f)
-	Libera toda a memória alocada para a fila.
-
+Solução:
